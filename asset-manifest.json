@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.72dad9ad.css",
+    "main.js": "/static/js/main.af953f18.js",
+    "static/media/digital-7.ttf": "/static/media/digital-7.93911ab167c943140756.ttf",
+    "static/media/ARCADE.TTF": "/static/media/ARCADE.0908c501a4d2c9da77ed.TTF",
+    "static/media/perc-808.mp3": "/static/media/perc-808.6a7b0f5cffedb26a0c10.mp3",
+    "index.html": "/index.html",
+    "main.72dad9ad.css.map": "/static/css/main.72dad9ad.css.map",
+    "main.af953f18.js.map": "/static/js/main.af953f18.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.72dad9ad.css",
+    "static/js/main.af953f18.js"
+  ]
+}
