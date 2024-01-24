@@ -235,6 +235,7 @@ code {
 .display {
   opacity: 0.3;
   box-shadow: 1px 1px 4px #9a9999;
+  background: linear-gradient(145deg, #f0f0f0, #cacaca);
   border-radius: 50px;
   transition: all 400ms ease-in-out;
   animation: fadeOutWithShadowDisplay 1000ms ease-in-out;
