@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/freecode-05/static/css/main.ec84057b.css",
-    "main.js": "/freecode-05/static/js/main.7fa57469.js",
-    "static/media/alarm_beep-clock-165474.mp3": "/freecode-05/static/media/alarm_beep-clock-165474.d99b4bac066613410226.mp3",
+    "main.js": "/freecode-05/static/js/main.5a39f9f7.js",
+    "static/media/beep.mp3": "/freecode-05/static/media/beep.d99b4bac066613410226.mp3",
     "static/media/digital-7.ttf": "/freecode-05/static/media/digital-7.93911ab167c943140756.ttf",
     "static/media/ARCADE.TTF": "/freecode-05/static/media/ARCADE.0908c501a4d2c9da77ed.TTF",
     "static/media/perc-808.mp3": "/freecode-05/static/media/perc-808.6a7b0f5cffedb26a0c10.mp3",
     "index.html": "/freecode-05/index.html",
     "main.ec84057b.css.map": "/freecode-05/static/css/main.ec84057b.css.map",
-    "main.7fa57469.js.map": "/freecode-05/static/js/main.7fa57469.js.map"
+    "main.5a39f9f7.js.map": "/freecode-05/static/js/main.5a39f9f7.js.map"
   },
   "entrypoints": [
     "static/css/main.ec84057b.css",
-    "static/js/main.7fa57469.js"
+    "static/js/main.5a39f9f7.js"
   ]
 }
