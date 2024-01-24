@@ -1,14 +1,19 @@
 import { useSelector } from "react-redux";
-import { getSessionTime, getIsTurnedOn } from "../../redux/timerSlice";
+import { getIsTurnedOn } from "../../redux/timerSlice";
+import { getCurrentTime } from "../../redux/timerSlice";
+import { getIsSession } from "../../redux/timerSlice";
+import beeep from "../../sounds/alarm_beep-clock-165474.mp3";
 
-export const Display = ({ timeForSession }) => {
-  const sessionLength = useSelector(getSessionTime);
+export const Display = () => {
   const isTurnedOn = useSelector(getIsTurnedOn);
+  const currentTime = useSelector(getCurrentTime);
+  const isSessionPhase = useSelector(getIsSession);
 
   return (
     <div
       className={` ${isTurnedOn ? " opacity-display " : "display"}
-      w-[520px] h-[240px] md:w-[300px] md:h-[360px] rounded-full mx-auto mt-10 flex flex-col py-8 opacity-0 transition-all`}
+      w-[520px] h-[240px] md:w-[300px] md:h-[360px] rounded-full mx-auto mt-10
+       flex flex-col py-8 opacity-0 transition-all`}
     >
       <p
         id="timer-label"
@@ -16,7 +21,7 @@ export const Display = ({ timeForSession }) => {
           isTurnedOn ? " opacity-text " : " back-text "
         } text-mainOrange font-digital text-7xl text-center opacity-0`}
       >
-        Time for Session
+        {isSessionPhase ? "Time for Session" : "break has begun"}
       </p>
       <p
         id="time-left"
@@ -24,8 +29,11 @@ export const Display = ({ timeForSession }) => {
           isTurnedOn ? " opacity-text " : " back-text "
         } text-mainOrange font-digital text-9xl text-center transition-all opacity-0`}
       >
-        {timeForSession}
+        {currentTime}
       </p>
+      <div className="beeep">
+        <audio id="beep" src={beeep}></audio>
+      </div>
     </div>
   );
 };

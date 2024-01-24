@@ -1,17 +1,30 @@
 import { HiMiniPlayPause } from "react-icons/hi2";
 import { FaRepeat } from "react-icons/fa6";
 import clickSound from "../../sounds/perc-808.mp3";
-import { useDispatch, useSelector } from "react-redux";
-import { getIsPressed, getIsTurnedOn, resetState } from "../../redux/timerSlice";
+import { useSelector } from "react-redux";
+import { useTimer } from "../../hooks/useCountDown";
+import { getIsTurnedOn, getSessionTime } from "../../redux/timerSlice";
 
 export const ControlePanell = ({ onBtnClick }) => {
-  const dispatch = useDispatch();
   const isTurnedOn = useSelector(getIsTurnedOn);
-  const isPressed = useSelector(getIsPressed);
+  const sessionTime = useSelector(getSessionTime);
+  const { startPause, reset } = useTimer();
+
+  const resetBtn = document.querySelector("#start_stop");
 
   const handleReset = (e) => {
-    dispatch(resetState());
     onBtnClick(e);
+    if (!isTurnedOn) return;
+    reset();
+    resetBtn.classList.remove("controle-btn-pressed");
+  };
+
+  const startTimer = (e) => {
+    onBtnClick(e);
+    if (!isTurnedOn) return;
+    if (sessionTime !== 0) {
+      startPause();
+    }
   };
 
   return (
@@ -21,7 +34,9 @@ export const ControlePanell = ({ onBtnClick }) => {
     >
       <button
         id="start_stop"
-        onClick={onBtnClick}
+        onClick={(e) => {
+          startTimer(e);
+        }}
         type="button"
         className={`${
           isTurnedOn ? " controle-paneell-btn-opacity " : "  "

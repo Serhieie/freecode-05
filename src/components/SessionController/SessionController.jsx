@@ -7,25 +7,30 @@ import {
   decrementSessionTime,
   getIsTurnedOn,
 } from "../../redux/timerSlice";
+import { getIsRunning } from "../../redux/timerSlice";
 
 export const SessionController = ({ onBtnClick }) => {
   const dispatch = useDispatch();
   const isTurnedOn = useSelector(getIsTurnedOn);
   const sessionLength = useSelector(getSessionTime);
+  const isRunning = useSelector(getIsRunning);
 
   const handleSessionSetup = (id, e) => {
-    if (id === "session-increment") {
-      dispatch(incrementSessionTime());
-    }
-    if (id === "session-decrement") {
-      dispatch(decrementSessionTime());
-    }
     onBtnClick(e);
+    if (!isTurnedOn) return;
+    if (!isRunning) {
+      if (id === "session-increment") {
+        dispatch(incrementSessionTime());
+      }
+      if (id === "session-decrement") {
+        dispatch(decrementSessionTime());
+      }
+    }
   };
 
   return (
     <div className="flex flex-col text-center">
-      <h2 id="break-label" className="text-2xl mb-4 font-bold md:text-lg">
+      <h2 id="session-label" className="text-2xl mb-4 font-bold md:text-lg">
         Session length
       </h2>
       <div className="flex flex-row gap-8 md:gap-4 md:flex-col items-center md:items-center">

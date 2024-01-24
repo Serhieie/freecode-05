@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { formatTime } from "../helpers/numFormatter";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { initialState, TimerState } from "./initialState";
@@ -7,6 +8,9 @@ export const timerSlice = createSlice({
   name: "timer",
   initialState,
   reducers: {
+    toggleIsSession(state) {
+      state.isSession = !state.isSession;
+    },
     putBreakTime(state, action: PayloadAction<number>) {
       state.breakTime = action.payload;
     },
@@ -19,7 +23,7 @@ export const timerSlice = createSlice({
       }
     },
     decrementBreakTime(state) {
-      if (state.breakTime > 0) {
+      if (state.breakTime > 1) {
         state.breakTime -= 1;
       }
     },
@@ -29,7 +33,7 @@ export const timerSlice = createSlice({
       }
     },
     decrementSessionTime(state) {
-      if (state.sessionTime > 0) {
+      if (state.sessionTime > 1) {
         state.sessionTime -= 1;
       }
     },
@@ -39,16 +43,32 @@ export const timerSlice = createSlice({
     toggleIsPressed(state) {
       state.isPressed = !state.isPressed;
     },
-    changeCurrentTime(state, action: PayloadAction<string>) {
+    setCurrentTime(state, action: PayloadAction<string>) {
       state.currentTime = action.payload;
     },
 
     resetState(state) {
-      Object.assign(state, initialState);
+      state.time = "";
+      state.isSession = true;
+      state.breakTime = 5;
+      state.sessionTime = 25;
+      state.isTurnedOn = true;
+      state.isPressed = false;
+      state.currentTime = formatTime(state.sessionTime * 60);
+      state.isRunning = false;
+      state.seconds = state.sessionTime * 60;
+      state.minutes = 25;
     },
 
-    toggleStarted(state) {
-      state.isPressed = !state.isPressed;
+    toggleIsRunning(state) {
+      state.isRunning = !state.isRunning;
+    },
+
+    setSeconds(state, action: PayloadAction<number>) {
+      state.seconds = action.payload;
+    },
+    setMinutes(state, action: PayloadAction<number>) {
+      state.minutes = action.payload;
     },
   },
 });
@@ -61,6 +81,7 @@ export const persistConfig = {
 
 export const persistedTimerReducer = persistReducer(persistConfig, timerSlice.reducer);
 export const {
+  toggleIsSession,
   putBreakTime,
   putSessionTime,
   toggleIsTurnedOn,
@@ -69,14 +90,21 @@ export const {
   decrementBreakTime,
   decrementSessionTime,
   incrementSessionTime,
-  changeCurrentTime,
+  setCurrentTime,
   resetState,
-  toggleStarted,
+  toggleIsRunning,
+  setSeconds,
+  setMinutes,
 } = timerSlice.actions;
 
+export const getIsSession = (state: { timer: TimerState }) => state.timer.isSession;
 export const getBreakTime = (state: { timer: TimerState }) => state.timer.breakTime;
 export const getSessionTime = (state: { timer: TimerState }) => state.timer.sessionTime;
 export const getIsTurnedOn = (state: { timer: TimerState }) => state.timer.isTurnedOn;
 export const getIsPressed = (state: { timer: TimerState }) => state.timer.isPressed;
 export const getCurrentTime = (state: { timer: TimerState }) => state.timer.currentTime;
+export const getIsRunning = (state: { timer: TimerState }) => state.timer.isRunning;
+export const getSeconds = (state: { timer: TimerState }) => state.timer.seconds;
+export const getMinutes = (state: { timer: TimerState }) => state.timer.minutes;
+
 export default timerSlice.reducer;

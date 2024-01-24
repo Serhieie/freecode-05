@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
+import { formatTime } from "../helpers/numFormatter";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  putBreakTime,
-  putSessionTime,
-  getIsPressed,
-  toggleIsPressed,
-  toggleStarted,
-  getSessionTime,
+  getIsRunning,
+  toggleIsRunning,
+  toggleIsSession,
   getBreakTime,
-  decrementSessionTime,
-  decrementBreakTime,
+  getSessionTime,
+  getSeconds,
+  setSeconds,
+  setCurrentTime,
   resetState,
 } from "../redux/timerSlice";
 
@@ -22,35 +22,62 @@ import {
  *
  */
 
-export const useCountdown = (callback?: () => void, interval = 1000) => {
+export const useTimer = () => {
   const dispatch = useDispatch();
-  const isPressed = useSelector(getIsPressed);
-  const breakTime = useSelector(getBreakTime);
+  const isRunning = useSelector(getIsRunning);
   const sessionTime = useSelector(getSessionTime);
-  const sessionTimeSeconds = sessionTime * 60;
-  const breakTimeSeconds = breakTime * 60;
+  const breakTime = useSelector(getBreakTime);
+  const seconds = useSelector(getSeconds);
 
-  const [time, setTime] = useState(sessionTimeSeconds);
+  const audioDiv = document.querySelector(".beeep");
+  const audio = audioDiv?.querySelector("audio");
+  const formatedSeconds = formatTime(seconds);
 
-  const formatTime = (totalSeconds: number): string => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  useEffect(() => {
+    dispatch(setSeconds(sessionTime * 60));
+  }, [dispatch, sessionTime]);
+
+  const togglePhase = useCallback(() => {
+    dispatch(setSeconds(!seconds ? breakTime * 60 : sessionTime * 60));
+    dispatch(toggleIsSession());
+  }, [sessionTime, breakTime, dispatch, seconds]);
+
+  const tick = useCallback(() => {
+    console.log(breakTime, sessionTime);
+    if (isRunning && seconds >= 0) {
+      dispatch(setSeconds(seconds - 1));
+      if (seconds === 0 && breakTime > 0) {
+        audio?.play();
+        togglePhase();
+      }
+    }
+  }, [isRunning, seconds, togglePhase, dispatch, breakTime, audio]);
+  //controllers
+  const startPause = () => {
+    dispatch(setCurrentTime(formatedSeconds));
+    dispatch(toggleIsRunning());
+  };
+  const reset = () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    dispatch(toggleIsSession());
+    dispatch(resetState());
+  };
+  const stop = () => {
+    startPause();
+    reset();
   };
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTime((prevTime) => {
-        if (prevTime === 0) {
-          if (callback) callback();
-          return breakTimeSeconds;
-        }
-        return prevTime - 1;
-      });
-    }, interval);
+    if (isRunning && seconds >= 0) {
+      const timeOut = setTimeout(tick, 1000);
+      return () => clearTimeout(timeOut);
+    }
+  }, [tick, isRunning, seconds]);
 
-    return () => clearInterval(intervalId);
-  }, [time, callback, interval, breakTimeSeconds]);
+  dispatch(setCurrentTime(formatedSeconds));
 
-  return formatTime(time);
+  return { startPause, reset, isRunning, formatedSeconds, stop };
 };

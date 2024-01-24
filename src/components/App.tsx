@@ -1,48 +1,49 @@
 import { BreakController } from "./BreakController/BreakController.jsx";
 import { SessionController } from "./SessionController/SessionController.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { useCountdown } from "../hooks/useCountDown";
 import {
-  getIsPressed,
+  getIsRunning,
   getIsTurnedOn,
   toggleIsPressed,
+  toggleIsRunning,
   toggleIsTurnedOn,
-  getBreakTime,
-  toggleStarted,
-  getSessionTime,
 } from "../redux/timerSlice";
 import { Display } from "./Display/Display.jsx";
 import { ControlePanell } from "./ControlePanell/ControlePanell";
 
 export const App: React.FC = () => {
   const dispatch = useDispatch();
+  const isRunning = useSelector(getIsRunning);
   const isTurnedOn = useSelector(getIsTurnedOn);
-  const isPressed = useSelector(getIsPressed);
-  const breakTime = useSelector(getBreakTime);
-  const sessionTime = useSelector(getSessionTime);
-  const timeForSession = useCountdown();
 
   const togglePower = () => {
     dispatch(toggleIsTurnedOn());
+    dispatch(toggleIsRunning());
   };
 
   const onBtnClickToggleStyles = (e: React.MouseEvent<HTMLButtonElement>): void => {
     const pressedBtn = e.target as HTMLElement;
     const audioElement = pressedBtn?.querySelector("audio") as HTMLAudioElement | null;
-    if (isPressed) return;
+
     dispatch(toggleIsPressed());
-    if (audioElement) {
+
+    if (audioElement && isTurnedOn) {
       audioElement.currentTime = 0;
       audioElement?.play();
     }
-    if (pressedBtn.classList.contains("controle-paneell-btn") && !isPressed) {
-      pressedBtn.classList.add("controle-btn-pressed");
-    } else if (!isPressed) {
-      pressedBtn.classList.add("pressed");
+
+    if (pressedBtn.classList.contains("controle-paneell-btn")) {
+      if (!isRunning && isTurnedOn) pressedBtn.classList.add("controle-btn-pressed");
+      if (isRunning) pressedBtn.classList.remove("controle-btn-pressed");
     }
+
+    pressedBtn.classList.add("pressed");
+
     setTimeout(() => {
       dispatch(toggleIsPressed());
-      pressedBtn.classList.remove("controle-btn-pressed", "pressed");
+
+      pressedBtn.classList.remove("pressed");
+      if (pressedBtn.id === "reset") pressedBtn.classList.remove("controle-btn-pressed");
     }, 100);
   };
 
@@ -56,7 +57,7 @@ export const App: React.FC = () => {
         <BreakController onBtnClick={handleClick} />
         <SessionController onBtnClick={handleClick} />
       </div>
-      <Display timeForSession={timeForSession} />
+      <Display />
       <ControlePanell onBtnClick={handleClick} />
       <div className="box-shadow p-2 pt-4 px-4 absolute -bottom-24 left-1/2 transform -translate-x-1/2">
         <div className=" checkbox-wrapper-25 mx-auto">

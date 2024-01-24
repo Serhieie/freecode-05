@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
+// import { formatTime } from "../../helpers/numFormatter";
 import {
   getBreakTime,
   incrementBreakTime,
   decrementBreakTime,
   getIsTurnedOn,
+  getIsRunning,
 } from "../../redux/timerSlice";
 import clickSound from "../../sounds/perc-808.mp3";
 
@@ -12,15 +14,19 @@ export const BreakController = ({ onBtnClick }) => {
   const dispatch = useDispatch();
   const isTurnedOn = useSelector(getIsTurnedOn);
   const breakLength = useSelector(getBreakTime);
+  const isRunning = useSelector(getIsRunning);
 
   const handleBreakSetup = (id, e) => {
-    if (id === "break-increment") {
-      dispatch(incrementBreakTime());
-    }
-    if (id === "break-decrement") {
-      dispatch(decrementBreakTime());
-    }
     onBtnClick(e);
+    if (!isTurnedOn) return;
+    if (!isRunning) {
+      if (id === "break-increment") {
+        dispatch(incrementBreakTime());
+      }
+      if (id === "break-decrement") {
+        dispatch(decrementBreakTime());
+      }
+    }
   };
 
   return (
@@ -30,7 +36,7 @@ export const BreakController = ({ onBtnClick }) => {
       </h2>
       <div className="flex items-center flex-row-reverse gap-10 md:gap-4 md:flex-col">
         <p
-          id=" break-length"
+          id="break-length"
           className={` m-0  pt-2 h-32  md:h-16 md:text-5xl text-mainOrange font-digital
          text-7xl span-shadow flex justify-center items-center px-8 md:px-0 `}
         >
