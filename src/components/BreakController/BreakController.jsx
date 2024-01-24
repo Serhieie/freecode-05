@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
-// import { formatTime } from "../../helpers/numFormatter";
 import {
   getBreakTime,
   incrementBreakTime,

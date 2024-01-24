@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { getIsTurnedOn } from "../../redux/timerSlice";
 import { getCurrentTime } from "../../redux/timerSlice";
 import { getIsSession } from "../../redux/timerSlice";
-import beeep from "../../sounds/alarm_beep-clock-165474.mp3";
+import beeep from "../../sounds/beep.mp3";
 
 export const Display = () => {
   const isTurnedOn = useSelector(getIsTurnedOn);

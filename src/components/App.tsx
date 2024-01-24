@@ -8,7 +8,7 @@ import {
   toggleIsRunning,
   toggleIsTurnedOn,
 } from "../redux/timerSlice";
-import { Display } from "./Display/Display.jsx";
+import { Display } from "./Display/Display";
 import { ControlePanell } from "./ControlePanell/ControlePanell";
 
 export const App: React.FC = () => {
@@ -16,34 +16,41 @@ export const App: React.FC = () => {
   const isRunning = useSelector(getIsRunning);
   const isTurnedOn = useSelector(getIsTurnedOn);
 
+  //power off its just visual effect for practice
   const togglePower = () => {
     dispatch(toggleIsTurnedOn());
     dispatch(toggleIsRunning());
   };
 
+  //toggle push styles for buttons and timeout to take out these styles isPressed state too fast
   const onBtnClickToggleStyles = (e: React.MouseEvent<HTMLButtonElement>): void => {
+    //getting elements
     const pressedBtn = e.target as HTMLElement;
     const audioElement = pressedBtn?.querySelector("audio") as HTMLAudioElement | null;
 
     dispatch(toggleIsPressed());
 
+    //clip sound when pressing button adn timer is turned on
     if (audioElement && isTurnedOn) {
       audioElement.currentTime = 0;
       audioElement?.play();
     }
 
+    //add styles for controle pannel btns. There is playPause btn working with different logic
+    // if its turned on an running its always at pressed state
     if (pressedBtn.classList.contains("controle-paneell-btn")) {
-      if (!isRunning && isTurnedOn) pressedBtn.classList.add("controle-btn-pressed");
-      if (isRunning) pressedBtn.classList.remove("controle-btn-pressed");
+      if (!isRunning && isTurnedOn) pressedBtn?.classList.add("controle-btn-pressed");
+      if (isRunning) pressedBtn?.classList.remove("controle-btn-pressed");
     }
 
-    pressedBtn.classList.add("pressed");
+    //simple btn was pressed styles
+    pressedBtn?.classList.add("pressed");
 
+    //timeout for removing styles from btns after pressing
     setTimeout(() => {
       dispatch(toggleIsPressed());
-
-      pressedBtn.classList.remove("pressed");
-      if (pressedBtn.id === "reset") pressedBtn.classList.remove("controle-btn-pressed");
+      pressedBtn?.classList.remove("pressed");
+      if (pressedBtn.id === "reset") pressedBtn?.classList.remove("controle-btn-pressed");
     }, 100);
   };
 

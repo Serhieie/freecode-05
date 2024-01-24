@@ -57,7 +57,6 @@ export const timerSlice = createSlice({
       state.currentTime = formatTime(state.sessionTime * 60);
       state.isRunning = false;
       state.seconds = state.sessionTime * 60;
-      state.minutes = 25;
     },
 
     toggleIsRunning(state) {
@@ -67,16 +66,13 @@ export const timerSlice = createSlice({
     setSeconds(state, action: PayloadAction<number>) {
       state.seconds = action.payload;
     },
-    setMinutes(state, action: PayloadAction<number>) {
-      state.minutes = action.payload;
-    },
   },
 });
 
 export const persistConfig = {
   key: "timer",
   storage,
-  blacklist: ["isPressed"],
+  blacklist: ["isPressed", "time", "audioElement"],
 };
 
 export const persistedTimerReducer = persistReducer(persistConfig, timerSlice.reducer);
@@ -94,7 +90,6 @@ export const {
   resetState,
   toggleIsRunning,
   setSeconds,
-  setMinutes,
 } = timerSlice.actions;
 
 export const getIsSession = (state: { timer: TimerState }) => state.timer.isSession;
@@ -105,6 +100,5 @@ export const getIsPressed = (state: { timer: TimerState }) => state.timer.isPres
 export const getCurrentTime = (state: { timer: TimerState }) => state.timer.currentTime;
 export const getIsRunning = (state: { timer: TimerState }) => state.timer.isRunning;
 export const getSeconds = (state: { timer: TimerState }) => state.timer.seconds;
-export const getMinutes = (state: { timer: TimerState }) => state.timer.minutes;
 
 export default timerSlice.reducer;

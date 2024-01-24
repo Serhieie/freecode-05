@@ -16,7 +16,7 @@ export const ControlePanell = ({ onBtnClick }) => {
     onBtnClick(e);
     if (!isTurnedOn) return;
     reset();
-    resetBtn.classList.remove("controle-btn-pressed");
+    resetBtn?.classList.remove("controle-btn-pressed");
   };
 
   const startTimer = (e) => {

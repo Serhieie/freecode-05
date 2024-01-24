@@ -10,7 +10,7 @@ export interface TimerState {
   currentTime: string;
   isRunning: boolean;
   seconds: number;
-  minutes: number;
+  audioElement: HTMLAudioElement | null;
 }
 
 export const initialState: TimerState = {
@@ -23,5 +23,5 @@ export const initialState: TimerState = {
   currentTime: formatTime(25 * 60),
   isRunning: false,
   seconds: 25 * 60,
-  minutes: 25,
+  audioElement: null,
 };
