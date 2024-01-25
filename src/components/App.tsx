@@ -1,5 +1,5 @@
-import { BreakController } from "./BreakController/BreakController.jsx";
-import { SessionController } from "./SessionController/SessionController.jsx";
+import { BreakController } from "./BreakController/BreakController";
+import { SessionController } from "./SessionController/SessionController";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getIsRunning,
@@ -10,6 +10,7 @@ import {
 import { Display } from "./Display/Display";
 import { ControlePanell } from "./ControlePanell/ControlePanell";
 import { Time } from "../components/Tme/Time";
+import { useCallback } from "react";
 
 export const App: React.FC = () => {
   const switchSound = require("../sounds/switch.mp3");
@@ -19,39 +20,43 @@ export const App: React.FC = () => {
   const isTurnedOn = useSelector(getIsTurnedOn);
 
   //power off its just visual effect for practice
-  const togglePower = () => {
+  const togglePower = useCallback(() => {
     const audioSwitch = new Audio(`${switchSound}`);
     dispatch(toggleIsTurnedOn());
     dispatch(toggleIsRunning());
     audioSwitch.play();
-  };
+  }, [dispatch, switchSound]);
 
   //toggle push styles for buttons and timeout to take out these styles isPressed state too fast
-  const onBtnClickToggleStyles = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    //getting elements
-    const pressedBtn = e.target as HTMLElement;
-    const audioclick = new Audio(`${clickSound}`);
+  const onBtnClickToggleStyles = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>): void => {
+      // getting elements
+      const pressedBtn = e.target as HTMLElement;
+      const audioclick = new Audio(`${clickSound}`);
 
-    //clip sound when pressing button adn timer is turned on
-    if (audioclick && isTurnedOn) {
-      audioclick.currentTime = 0;
-      audioclick?.play();
-    }
-    //add styles for controle pannel btns. There is playPause btn working with different logic
-    // if its turned on an running its always at pressed state
-    if (pressedBtn.classList.contains("controle-paneell-btn")) {
-      if (!isRunning && isTurnedOn) pressedBtn?.classList.add("controle-btn-pressed");
-      if (isRunning) pressedBtn?.classList.remove("controle-btn-pressed");
-    }
-    //simple btn was pressed styles
-    pressedBtn?.classList.add("pressed");
+      // clip sound when pressing button and timer is turned on
+      if (audioclick && isTurnedOn) {
+        audioclick.currentTime = 0;
+        audioclick?.play();
+      }
+      // add styles for control panel btns. There is playPause btn working with different logic
+      // if it's turned on and running, it's always in the pressed state
+      if (pressedBtn.classList.contains("controle-paneell-btn")) {
+        if (!isRunning && isTurnedOn) pressedBtn?.classList.add("controle-btn-pressed");
+        if (isRunning) pressedBtn?.classList.remove("controle-btn-pressed");
+      }
+      // simple btn was pressed styles
+      pressedBtn?.classList.add("pressed");
 
-    //timeout for removing styles from btns after pressing
-    setTimeout(() => {
-      pressedBtn?.classList.remove("pressed");
-      if (pressedBtn.id === "reset") pressedBtn?.classList.remove("controle-btn-pressed");
-    }, 100);
-  };
+      // timeout for removing styles from btns after pressing
+      setTimeout(() => {
+        pressedBtn?.classList.remove("pressed");
+        if (pressedBtn.id === "reset")
+          pressedBtn?.classList.remove("controle-btn-pressed");
+      }, 100);
+    },
+    [clickSound, isTurnedOn, isRunning]
+  );
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     onBtnClickToggleStyles(e);
@@ -70,7 +75,7 @@ export const App: React.FC = () => {
           <input onChange={togglePower} type="checkbox" checked={!isTurnedOn} />
         </div>
       </div>
-      <div className="flex justify-between items-center px-4 md:mt-4">
+      <div className="flex justify-between items-center px-14 md:px-6 md:mt-4">
         <Time />
         <p className=" text-center -bottom-28 right-10 md:text-xs">
           designed by Serhieie

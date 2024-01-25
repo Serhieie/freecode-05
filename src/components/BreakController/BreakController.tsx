@@ -8,13 +8,17 @@ import {
   getIsRunning,
 } from "../../redux/timerSlice";
 
-export const BreakController = ({ onBtnClick }) => {
+interface BreakControllerProps {
+  onBtnClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export const BreakController: React.FC<BreakControllerProps> = ({ onBtnClick }) => {
   const dispatch = useDispatch();
   const isTurnedOn = useSelector(getIsTurnedOn);
   const breakLength = useSelector(getBreakTime);
   const isRunning = useSelector(getIsRunning);
 
-  const handleBreakSetup = (id, e) => {
+  const handleBreakSetup = (id: string, e: React.MouseEvent<HTMLButtonElement>) => {
     onBtnClick(e);
     if (!isTurnedOn) return;
     if (!isRunning) {

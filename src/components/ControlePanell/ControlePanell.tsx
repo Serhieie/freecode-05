@@ -1,24 +1,28 @@
 import { HiMiniPlayPause } from "react-icons/hi2";
+import { useRef } from "react";
 import { FaRepeat } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useTimer } from "../../hooks/useCountDown";
 import { getIsTurnedOn, getSessionTime } from "../../redux/timerSlice";
 
-export const ControlePanell = ({ onBtnClick }) => {
+interface ControlePanellProps {
+  onBtnClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export const ControlePanell: React.FC<ControlePanellProps> = ({ onBtnClick }) => {
+  const resetBtnRef = useRef<HTMLButtonElement>(null);
   const isTurnedOn = useSelector(getIsTurnedOn);
   const sessionTime = useSelector(getSessionTime);
   const { startPause, reset } = useTimer();
 
-  const resetBtn = document.querySelector("#start_stop");
-
-  const handleReset = (e) => {
+  const handleReset = (e: React.MouseEvent<HTMLButtonElement>) => {
     onBtnClick(e);
     if (!isTurnedOn) return;
     reset();
-    resetBtn?.classList.remove("controle-btn-pressed");
+    resetBtnRef.current?.classList.remove("controle-btn-pressed");
   };
 
-  const startTimer = (e) => {
+  const startTimer = (e: React.MouseEvent<HTMLButtonElement>) => {
     onBtnClick(e);
     if (!isTurnedOn) return;
     if (sessionTime !== 0) {
@@ -33,6 +37,7 @@ export const ControlePanell = ({ onBtnClick }) => {
     >
       <button
         id="start_stop"
+        ref={resetBtnRef}
         onClick={(e) => {
           startTimer(e);
         }}

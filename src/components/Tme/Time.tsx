@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getIsTurnedOn, getTime, setTime } from "../../redux/timerSlice";
+import { getTime, setTime } from "../../redux/timerSlice";
 
 export const Time = () => {
   const dispatch = useDispatch();
-  const isTurnedOn = useSelector(getIsTurnedOn);
   const time = useSelector(getTime);
 
   useEffect(() => {

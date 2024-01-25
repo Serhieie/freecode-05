@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import { getIsTurnedOn } from "../../redux/timerSlice";
 import { getCurrentTime } from "../../redux/timerSlice";
 import { getIsSession } from "../../redux/timerSlice";
-import beeep from "../../sounds/beep.mp3";
 
-export const Display = () => {
+export const Display: React.FC = () => {
+  const beeep = require("../../sounds/beep.mp3");
   const isTurnedOn = useSelector(getIsTurnedOn);
   const currentTime = useSelector(getCurrentTime);
   const isSessionPhase = useSelector(getIsSession);

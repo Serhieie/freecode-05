@@ -8,13 +8,17 @@ import {
 } from "../../redux/timerSlice";
 import { getIsRunning } from "../../redux/timerSlice";
 
-export const SessionController = ({ onBtnClick }) => {
+interface SessionControllerProps {
+  onBtnClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export const SessionController: React.FC<SessionControllerProps> = ({ onBtnClick }) => {
   const dispatch = useDispatch();
   const isTurnedOn = useSelector(getIsTurnedOn);
   const sessionLength = useSelector(getSessionTime);
   const isRunning = useSelector(getIsRunning);
 
-  const handleSessionSetup = (id, e) => {
+  const handleSessionSetup = (id: string, e: React.MouseEvent<HTMLButtonElement>) => {
     onBtnClick(e);
     if (!isTurnedOn) return;
     if (!isRunning) {
