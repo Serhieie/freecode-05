@@ -8,6 +8,9 @@ export const timerSlice = createSlice({
   name: "timer",
   initialState,
   reducers: {
+    setTime(state, action: PayloadAction<string>) {
+      state.time = action.payload;
+    },
     toggleIsSession(state) {
       state.isSession = !state.isSession;
     },
@@ -48,7 +51,6 @@ export const timerSlice = createSlice({
     },
 
     resetState(state) {
-      state.time = "";
       state.isSession = true;
       state.breakTime = 5;
       state.sessionTime = 25;
@@ -77,6 +79,7 @@ export const persistConfig = {
 
 export const persistedTimerReducer = persistReducer(persistConfig, timerSlice.reducer);
 export const {
+  setTime,
   toggleIsSession,
   putBreakTime,
   putSessionTime,
@@ -92,6 +95,7 @@ export const {
   setSeconds,
 } = timerSlice.actions;
 
+export const getTime = (state: { timer: TimerState }) => state.timer.time;
 export const getIsSession = (state: { timer: TimerState }) => state.timer.isSession;
 export const getBreakTime = (state: { timer: TimerState }) => state.timer.breakTime;
 export const getSessionTime = (state: { timer: TimerState }) => state.timer.sessionTime;

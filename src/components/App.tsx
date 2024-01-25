@@ -10,6 +10,7 @@ import {
 } from "../redux/timerSlice";
 import { Display } from "./Display/Display";
 import { ControlePanell } from "./ControlePanell/ControlePanell";
+import { Time } from "../components/Tme/Time";
 
 export const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -18,8 +19,10 @@ export const App: React.FC = () => {
 
   //power off its just visual effect for practice
   const togglePower = () => {
+    const audio = new Audio(`${process.env.PUBLIC_URL}/switch.mp3`);
     dispatch(toggleIsTurnedOn());
     dispatch(toggleIsRunning());
+    audio.play();
   };
 
   //toggle push styles for buttons and timeout to take out these styles isPressed state too fast
@@ -59,17 +62,23 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className=" pt-6 md:pt-8   mx-auto flex flex-col relative">
+    <div className=" pt-5 md:py-4   mx-auto flex flex-col relative">
       <div className=" flex  mx-auto items-center justify-center gap-28 md:gap-12 transition-all">
         <BreakController onBtnClick={handleClick} />
         <SessionController onBtnClick={handleClick} />
       </div>
       <Display />
       <ControlePanell onBtnClick={handleClick} />
-      <div className="box-shadow p-2 pt-4 px-4 absolute -bottom-24 left-1/2 transform -translate-x-1/2">
+      <div className="box-shadow p-2 pt-4 px-4  md:mt-6 mt-10 mx-auto  transform ">
         <div className=" checkbox-wrapper-25 mx-auto">
-          <input onClick={togglePower} type="checkbox" />
+          <input onClick={togglePower} type="checkbox" checked={!isTurnedOn} />
         </div>
+      </div>
+      <div className="flex justify-between items-center px-4 md:mt-4">
+        <Time />
+        <p className=" text-center -bottom-28 right-10 md:text-xs">
+          designed by Serhieie
+        </p>
       </div>
     </div>
   );

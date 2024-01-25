@@ -30,7 +30,7 @@ export const ControlePanell = ({ onBtnClick }) => {
   return (
     <div
       id="break-label"
-      className="box-shadow flex gap-4  mx-auto mt-12 md:mt-8 py-6 md:py-5 px-16 md:px-10"
+      className="box-shadow flex gap-4  mx-auto mt-10  md:mt-6  py-6 md:py-5 px-16 md:px-10"
     >
       <button
         id="start_stop"

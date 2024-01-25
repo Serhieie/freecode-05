@@ -12,8 +12,8 @@ export const Display = () => {
   return (
     <div
       className={` ${isTurnedOn ? " opacity-display " : "display"}
-      w-[520px] h-[240px] md:w-[300px] md:h-[360px] rounded-full mx-auto mt-10
-       flex flex-col py-8 opacity-0 transition-all`}
+      w-[520px] h-[240px] md:w-[300px] md:h-[360px] rounded-full mx-auto mt-8
+      md:mt-6 flex flex-col py-8 opacity-0 transition-all`}
     >
       <p
         id="timer-label"

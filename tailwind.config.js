@@ -17,13 +17,14 @@ module.exports = {
         sm: { max: "519px" },
         ssm: { max: "375px" },
         sm2: { min: "520px", max: "767px" },
+        smallScreen: { min: "768px" },
         largeScreen: { min: "1399px" },
         extraLargeScreen: { min: "1540px" },
       },
       fontFamily: {
         bigFont: "Bebas Neue, sans-serif",
         digital: "Digital-7, sans-serif",
-        arcade: "ARKADE, sans-serif",
+        arcade: "arcade, sans-serif",
       },
       lineHeight: {
         "extra-tight": "0.75",
