@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { formatTime } from "../helpers/numFormatter";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -13,40 +13,34 @@ import {
   resetState,
 } from "../redux/timerSlice";
 
-/**
- *
- *
- * This Hook for Redux will not take any props, but will give you back reaction if you will set
- * time at break or session field and will press "play". Here is import of simple function
- * for formating time from seconds to MM:SS format and Hook will give you back this object
- * { startPause, reset, formatedSeconds } with few mettods described below and formatedSeconds like 00:05
- */
-
 export const useTimer = () => {
   const dispatch = useDispatch();
 
-  //redux state getted here
+  // redux state getted here
   const isRunning = useSelector(getIsRunning);
   const sessionTime = useSelector(getSessionTime);
   const breakTime = useSelector(getBreakTime);
   const seconds = useSelector(getSeconds);
 
-  //audio elements
+  // audio elements
   const audioDiv = document.querySelector(".beeep");
   const audio = audioDiv?.querySelector("audio");
 
-  //starts here
+  // using useRef to store the formatted seconds
+  const formatedSecondsR = useRef(formatTime(seconds));
+
+  // starts here
   useEffect(() => {
     dispatch(setSeconds(sessionTime * 60));
   }, [dispatch, sessionTime]);
 
-  //function for toggle phase from sessiton to break and again to session ...
+  // function for toggle phase from session to break and again to session
   const togglePhase = useCallback(() => {
     dispatch(setSeconds(!seconds ? breakTime * 60 : sessionTime * 60));
     dispatch(toggleIsSession());
   }, [sessionTime, breakTime, dispatch, seconds]);
 
-  //simple tick for countdown
+  // simple tick for countdown
   const tick = useCallback(() => {
     if (isRunning && seconds >= 0) {
       dispatch(setSeconds(seconds - 1));
@@ -57,9 +51,9 @@ export const useTimer = () => {
     }
   }, [isRunning, seconds, togglePhase, dispatch, breakTime, audio]);
 
-  //controllers StartPause and Reset
+  // controllers StartPause and Reset
   const startPause = () => {
-    dispatch(setCurrentTime(formatedSeconds));
+    dispatch(setCurrentTime(formatedSecondsR.current));
     dispatch(toggleIsRunning());
   };
   const reset = () => {
@@ -71,17 +65,16 @@ export const useTimer = () => {
     dispatch(resetState());
   };
 
-  //using our tick for countdown wich depends of seconds
+  // using our tick for countdown which depends on seconds
   useEffect(() => {
+    formatedSecondsR.current = formatTime(seconds);
+    dispatch(setCurrentTime(formatedSecondsR.current));
+
     if (isRunning && seconds >= 0) {
       const timeOut = setTimeout(tick, 1000);
       return () => clearTimeout(timeOut);
     }
-  }, [tick, isRunning, seconds]);
+  }, [tick, isRunning, seconds, dispatch]);
 
-  //formatting time
-  const formatedSeconds = formatTime(seconds);
-  dispatch(setCurrentTime(formatedSeconds));
-
-  return { startPause, reset, formatedSeconds };
+  return { startPause, reset, formatedSeconds: formatedSecondsR.current };
 };

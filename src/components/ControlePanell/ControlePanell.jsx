@@ -1,6 +1,5 @@
 import { HiMiniPlayPause } from "react-icons/hi2";
 import { FaRepeat } from "react-icons/fa6";
-import clickSound from "../../sounds/perc-808.mp3";
 import { useSelector } from "react-redux";
 import { useTimer } from "../../hooks/useCountDown";
 import { getIsTurnedOn, getSessionTime } from "../../redux/timerSlice";
@@ -43,7 +42,6 @@ export const ControlePanell = ({ onBtnClick }) => {
         }  p-4 md:p-2 w-24 md:w-20 flex 
       justify-center items-center controle-paneell-btn`}
       >
-        <audio className="clip" src={clickSound}></audio>
         <HiMiniPlayPause className={`${isTurnedOn ? " opacity-text" : " back-text "}`} />
       </button>
       <button
@@ -55,7 +53,6 @@ export const ControlePanell = ({ onBtnClick }) => {
         }  p-4 md:p-2 w-24 md:w-20 flex 
       justify-center items-center controle-paneell-btn`}
       >
-        <audio className="clip" src={clickSound}></audio>
         <FaRepeat className={`${isTurnedOn ? " opacity-text" : " back-text "}`} />
       </button>
     </div>

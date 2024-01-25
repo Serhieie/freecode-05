@@ -7,7 +7,6 @@ import {
   getIsTurnedOn,
   getIsRunning,
 } from "../../redux/timerSlice";
-import clickSound from "../../sounds/perc-808.mp3";
 
 export const BreakController = ({ onBtnClick }) => {
   const dispatch = useDispatch();
@@ -57,7 +56,6 @@ export const BreakController = ({ onBtnClick }) => {
             } button-shadow text-xl md:text-sm block text-textColor 
           p-5 md:p-4  mx-auto  transition-all hover:transition-all opacity-0  rounded-[8px]`}
           >
-            <audio className="clip" src={clickSound}></audio>
             <BiSolidDownArrow
               className={`${isTurnedOn ? " opacity-text" : " back-text "}`}
             />
@@ -71,7 +69,6 @@ export const BreakController = ({ onBtnClick }) => {
             } button-shadow text-xl md:text-sm block text-textColor 
           p-5 md:p-4  mx-auto transition-all hover:transition-all opacity-0 rounded-[8px]`}
           >
-            <audio className="clip" src={clickSound}></audio>
             <BiSolidUpArrow
               className={`${isTurnedOn ? " opacity-text" : " back-text "}`}
             />

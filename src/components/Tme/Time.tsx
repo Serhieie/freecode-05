@@ -33,7 +33,7 @@ export const Time = () => {
     >
       <p
         className={`
-          ${isTurnedOn ? " opacity-text " : " back-text "}
+         
           m-0 p-0 mt-4 md:mt-2 text-center`}
       >
         {time}

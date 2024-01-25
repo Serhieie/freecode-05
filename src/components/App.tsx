@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getIsRunning,
   getIsTurnedOn,
-  toggleIsPressed,
   toggleIsRunning,
   toggleIsTurnedOn,
 } from "../redux/timerSlice";
@@ -13,45 +12,42 @@ import { ControlePanell } from "./ControlePanell/ControlePanell";
 import { Time } from "../components/Tme/Time";
 
 export const App: React.FC = () => {
+  const switchSound = require("../sounds/switch.mp3");
+  const clickSound = require("../sounds/perc-808.mp3");
   const dispatch = useDispatch();
   const isRunning = useSelector(getIsRunning);
   const isTurnedOn = useSelector(getIsTurnedOn);
 
   //power off its just visual effect for practice
   const togglePower = () => {
-    const audio = new Audio(`${process.env.PUBLIC_URL}/switch.mp3`);
+    const audioSwitch = new Audio(`${switchSound}`);
     dispatch(toggleIsTurnedOn());
     dispatch(toggleIsRunning());
-    audio.play();
+    audioSwitch.play();
   };
 
   //toggle push styles for buttons and timeout to take out these styles isPressed state too fast
   const onBtnClickToggleStyles = (e: React.MouseEvent<HTMLButtonElement>): void => {
     //getting elements
     const pressedBtn = e.target as HTMLElement;
-    const audioElement = pressedBtn?.querySelector("audio") as HTMLAudioElement | null;
-
-    dispatch(toggleIsPressed());
+    const audioclick = new Audio(`${clickSound}`);
 
     //clip sound when pressing button adn timer is turned on
-    if (audioElement && isTurnedOn) {
-      audioElement.currentTime = 0;
-      audioElement?.play();
+    if (audioclick && isTurnedOn) {
+      audioclick.currentTime = 0;
+      audioclick?.play();
     }
-
     //add styles for controle pannel btns. There is playPause btn working with different logic
     // if its turned on an running its always at pressed state
     if (pressedBtn.classList.contains("controle-paneell-btn")) {
       if (!isRunning && isTurnedOn) pressedBtn?.classList.add("controle-btn-pressed");
       if (isRunning) pressedBtn?.classList.remove("controle-btn-pressed");
     }
-
     //simple btn was pressed styles
     pressedBtn?.classList.add("pressed");
 
     //timeout for removing styles from btns after pressing
     setTimeout(() => {
-      dispatch(toggleIsPressed());
       pressedBtn?.classList.remove("pressed");
       if (pressedBtn.id === "reset") pressedBtn?.classList.remove("controle-btn-pressed");
     }, 100);
@@ -71,7 +67,7 @@ export const App: React.FC = () => {
       <ControlePanell onBtnClick={handleClick} />
       <div className="box-shadow p-2 pt-4 px-4  md:mt-6 mt-10 mx-auto  transform ">
         <div className=" checkbox-wrapper-25 mx-auto">
-          <input onClick={togglePower} type="checkbox" checked={!isTurnedOn} />
+          <input onChange={togglePower} type="checkbox" checked={!isTurnedOn} />
         </div>
       </div>
       <div className="flex justify-between items-center px-4 md:mt-4">

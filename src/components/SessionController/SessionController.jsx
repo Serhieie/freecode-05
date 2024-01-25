@@ -1,5 +1,4 @@
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
-import clickSound from "../../sounds/perc-808.mp3";
 import { useSelector, useDispatch } from "react-redux";
 import {
   getSessionTime,
@@ -57,7 +56,6 @@ export const SessionController = ({ onBtnClick }) => {
             } button-shadow text-xl md:text-sm block text-textColor 
           p-5 md:p-4  mx-auto  transition-all hover:transition-all opacity-0 rounded-[8px]`}
           >
-            <audio className="clip" src={clickSound}></audio>
             <BiSolidDownArrow
               className={`${isTurnedOn ? " opacity-text" : " back-text "}`}
             />
@@ -71,7 +69,6 @@ export const SessionController = ({ onBtnClick }) => {
             } button-shadow text-xl md:text-sm block text-textColor 
           p-5 md:p-4  mx-auto transition-all hover:transition-all opacity-0 rounded-[8px]`}
           >
-            <audio className="clip" src={clickSound}></audio>
             <BiSolidUpArrow
               className={`${isTurnedOn ? " opacity-text" : " back-text "}`}
             />
